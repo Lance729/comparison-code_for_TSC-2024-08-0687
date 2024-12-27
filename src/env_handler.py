@@ -238,6 +238,19 @@ class Environment_Handler:
         return aloss    
 
 
+def display_env_usage():
+    """
+    Function to demonstrate the usage of Environment_Handler.
+    """
+    scheme = [1,7,8]
+    network_params = Network_Parameters(
+        num_node=len(scheme),    # Number of nodes
+        tau=6                    # Computation power of edge server is tau times that of UE
+    )
+    env = Environment_Handler(network_params)
+    energy_results = env.get_energy_consumption(scheme)
+    print(f"total_energy: {energy_results[0]},\n transmission_energy_consumption_mWs: {energy_results[1]},\n computation_energy_consumption_ws*1000: {energy_results[2]},\n trans_energy_set: {energy_results[3]},\n comp_energy_set: {energy_results[4]}")
+    print('The environment is generated successfully!')
 
 # if __name__ == '__main__':
 

@@ -16,7 +16,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
 
 from src import env_handler, reinforcement_learning, comparision_modules, configuration, utils
-from env_handler import Environment_Handler
+from env_handler import Environment_Handler, display_env_usage
 from reinforcement_learning import RL_for_DNN, RL_for_BayesianOptimization
 from configuration import Network_Parameters
 from dataclasses import dataclass, field
@@ -94,6 +94,8 @@ if __name__ == '__main__':
     # RL_with_DNN()
     eval_DNN = True
     eval_BO = False
+
+    display_env_usage()
 
     if eval_DNN is True:
         DNN_impl_result = RL_with_DNN()

@@ -15,7 +15,7 @@ import numpy as np
 
 
 
-def calculate_latency(actor_allocation_scheme: np.ndarray, net_detail: dict, model_details: dict): # 输入传输方案，计算总延迟。
+def calculate_latency(actor_allocation_scheme: np.ndarray, net_detail: dict, model_details: dict): # Input transmission scheme, calculate total latency.
     '''
     Description: This function is used to calculate the latency of the system.
     Args:
@@ -26,9 +26,8 @@ def calculate_latency(actor_allocation_scheme: np.ndarray, net_detail: dict, mod
         latency_total: The total latency of the system.
 
     '''
-    # actor_allocation_scheme = np.array([[3], [4], [0], [0], [7]], np.int8) # 假设一个分割方案。
-    '''这里的分割方案元素应该代表着第几个节点，在actor决策的时候我们就应该让取出来的下标都+1。因为如果按照下标从0开始算的话，那么不承担计算量的0就无法与下标为0的第一个节点相区分。所以方案给出的元素是第几个节点的计算量的意思，0代表不承担计算量。假设某一个元素为3，那么他代表了包含第三个分割点以内的计算量。而所以计算量的时候，第三个节点的下标是2。
-    因为从零开始计算，所以第三个节点的计算量为sum(self.inference_graph.x[0:3,0])，这个表示前3个节点相加，
+    # actor_allocation_scheme = np.array([[3], [4], [0], [0], [7]], np.int8) # Assume a segmentation scheme.
+    '''The elements of the segmentation scheme here should represent the number of nodes. When making actor decisions, we should add 1 to the extracted index. Because if we start counting from 0, then the 0 that does not bear the amount of computation cannot be distinguished from the first node with an index of 0. Therefore, the element given by the scheme means the amount of computation of the number of nodes, and 0 means not bearing the amount of computation. Suppose an element is 3, then it represents the amount of computation within the third segmentation point. Since the calculation starts from zero, the amount of computation of the third node is sum(self.inference_graph.x[0:3,0]), which means the sum of the first 3 nodes.
     '''
     comp_latency = 0
     comm_latency = 0
@@ -38,78 +37,78 @@ def calculate_latency(actor_allocation_scheme: np.ndarray, net_detail: dict, mod
  
 
     net_graph, inference_graph = get_graph(net_detail, model_details)
-    num_net_node, network_dim = net_graph.x.shape[0], net_graph.x.shape[1] # 网络节点特征的数量，目前是1
-    num_inference_node, inference_dim = inference_graph.x.shape[0], inference_graph.x.shape[1] # 推理模型的分割点数和点特征的数量，分割点也是动作空间，目前分割点为8个，因为还要考虑输入层和输出层，点特征数为1
+    num_net_node, network_dim = net_graph.x.shape[0], net_graph.x.shape[1] # The number of network node features, currently 1
+    num_inference_node, inference_dim = inference_graph.x.shape[0], inference_graph.x.shape[1] # The number of segmentation points and point features of the inference model. The segmentation point is also the action space. Currently, there are 8 segmentation points, considering the input and output layers, and the number of point features is 1
 
-    # 创建计算时延和通信时延的矩阵
+    # Create matrices for computation latency and communication latency
     comp_latency_matrix = np.zeros((num_net_node, 1))
     comm_latency_matrix = np.zeros((num_net_node, 1))
 
-    # print("分割方案为：", actor_allocation_scheme)
-    for i in range(num_net_node): # 这里输入的模型分割的策略，策略里的元素是代表第几个分割点，而不是下标从0开始的索引。
-        # print('第 %d 个节点'%(i+1))
-        comp_ability = net_graph.x[i, 0] # 节点的算力，取x中第一列的第i个元素
+    # print("Segmentation scheme:", actor_allocation_scheme)
+    for i in range(num_net_node): # The input model segmentation strategy, the elements in the strategy represent the number of segmentation points, not the index starting from 0.
+        # print('Node %d'%(i+1))
+        comp_ability = net_graph.x[i, 0] # The computing power of the node, taking the i-th element in the first column of x
         if i == 0:
             comm_speed = net_graph.edge_attr[i, 0]
             if actor_allocation_scheme[i] == 0:
                 comp_requirement = 0
                 comm_Kbits = inference_graph.edge_attr[0,0]
-            elif 0< actor_allocation_scheme[i] < num_inference_node: # 如果非第一节点i承担计算量，则计算前actor_allocation_scheme[i]个节点的计算量，和这个几点的输出量，再把分割点及前面清零。
+            elif 0 < actor_allocation_scheme[i] < num_inference_node: # If a non-first node i bears the amount of computation, calculate the amount of computation of the first actor_allocation_scheme[i] nodes and the output of this point, then clear the segmentation point and the previous ones.
 
                 comp_requirement = sum(inference_graph.x[0:actor_allocation_scheme[i],0])
-                comm_Kbits = inference_graph.edge_attr[actor_allocation_scheme[i]-1] # 第几个节点索引下标时要减1
-                inference_graph.x[0:actor_allocation_scheme[i], 0] = 0 # 给选过的点置零
-            elif actor_allocation_scheme[i] == num_inference_node: # 如果分割点为最后一个，则计算之前的计算量，输出为最后一个分割点的输出，但是最后一个分割点没有自己的输出，它输出结果，所以输出量跟上一个分割点相同。
+                comm_Kbits = inference_graph.edge_attr[actor_allocation_scheme[i]-1] # The index of the number of nodes should be subtracted by 1
+                inference_graph.x[0:actor_allocation_scheme[i], 0] = 0 # Set the selected points to zero
+            elif actor_allocation_scheme[i] == num_inference_node: # If the segmentation point is the last one, calculate the previous amount of computation. The output is the output of the last segmentation point, but the last segmentation point has no output itself, it outputs the result, so the output is the same as the previous segmentation point.
                 comp_requirement = sum(inference_graph.x[0:actor_allocation_scheme[i],0])
-                comm_Kbits = inference_graph.edge_attr[actor_allocation_scheme[i]-2] # 传输量这里要-2，因为边本身就比节点少一个，最后一个节点-1之后索引小标还是超过了，所以要-2、
+                comm_Kbits = inference_graph.edge_attr[actor_allocation_scheme[i]-2] # The transmission amount here should be subtracted by 2, because there is one less edge than the node itself. After subtracting 1 from the last node, the index is still exceeded, so it should be subtracted by 2.
 
-        elif 0 < i < (num_net_node-1):  # i既不是第一个，也不是最后一个节点时
+        elif 0 < i < (num_net_node-1):  # When i is neither the first nor the last node
             comm_speed = net_graph.edge_attr[i, 0]
-            if actor_allocation_scheme[i] == 0: # 如果非第一节点不承担计算量，则传输数据量与上次一样，起转发作用。
+            if actor_allocation_scheme[i] == 0: # If a non-first node does not bear the amount of computation, the transmission data amount is the same as the last time, acting as a relay.
                 comp_requirement = 0
                 comm_Kbits = comm_Kbits
-            elif 0< actor_allocation_scheme[i] < num_inference_node: # 如果非第一节点i承担计算量，则计算前actor_allocation_scheme[i]个节点的计算量，和这个几点的输出量，再把分割点及前面清零。
+            elif 0 < actor_allocation_scheme[i] < num_inference_node: # If a non-first node i bears the amount of computation, calculate the amount of computation of the first actor_allocation_scheme[i] nodes and the output of this point, then clear the segmentation point and the previous ones.
                 comp_requirement = sum(inference_graph.x[0:actor_allocation_scheme[i],0])
-                comm_Kbits = inference_graph.edge_attr[actor_allocation_scheme[i]-1] # 第几个节点索引下标时要减1
+                comm_Kbits = inference_graph.edge_attr[actor_allocation_scheme[i]-1] # The index of the number of nodes should be subtracted by 1
 
-                inference_graph.x[0:actor_allocation_scheme[i], 0] = 0 # 给选过的点置零
-            elif actor_allocation_scheme[i] == num_inference_node: # 如果分割点为最后一个，则计算之前的计算量，输出为最后一个分割点的输出，但是最后一个分割点没有自己的输出，它输出结果，所以输出量跟上一个分割点相同。
+                inference_graph.x[0:actor_allocation_scheme[i], 0] = 0 # Set the selected points to zero
+            elif actor_allocation_scheme[i] == num_inference_node: # If the segmentation point is the last one, calculate the previous amount of computation. The output is the output of the last segmentation point, but the last segmentation point has no output itself, it outputs the result, so the output is the same as the previous segmentation point.
                 comp_requirement = sum(inference_graph.x[0:actor_allocation_scheme[i],0])
-                comm_Kbits = inference_graph.edge_attr[actor_allocation_scheme[i]-2] # 传输量这里要-2，因为边本身就比节点少一个，最后一个节点-1之后索引小标还是超过了，所以要-2、
+                comm_Kbits = inference_graph.edge_attr[actor_allocation_scheme[i]-2] # The transmission amount here should be subtracted by 2, because there is one less edge than the node itself. After subtracting 1 from the last node, the index is still exceeded, so it should be subtracted by 2.
             if type(comm_Kbits) is not float : comm_Kbits = comm_Kbits.item()
-        elif i == (num_net_node-1): # 如果i是最后一个节点，那他没有传输量，也没有传输速度，但是可以承担计算量。 但是不需要给前面的计算量清0
+        elif i == (num_net_node-1): # If i is the last node, it has no transmission amount or transmission speed, but it can bear the amount of computation. However, there is no need to clear the previous amount of computation.
             comm_speed = 0
 
-            if actor_allocation_scheme[i] == 0: # 如果最后一个节点不承担计算量，则传输数据量为0
+            if actor_allocation_scheme[i] == 0: # If the last node does not bear the amount of computation, the transmission data amount is 0
                 comp_requirement = 0
-                comm_Kbits = 0 # 最后一个节点的传输量永远是0
-            # elif 0< actor_allocation_scheme[i] < num_inference_node: # 如果最后一个节点i承担计算量，则计算前actor_allocation_scheme[i]个节点的计算量
-            elif actor_allocation_scheme[i] != 0: # 如果最后一个节点i承担计算量，则计算前actor_allocation_scheme[i]个节点的计算量
+                comm_Kbits = 0 # The transmission amount of the last node is always 0
+            # elif 0< actor_allocation_scheme[i] < num_inference_node: # If the last node i bears the amount of computation, calculate the amount of computation of the first actor_allocation_scheme[i] nodes
+            elif actor_allocation_scheme[i] != 0: # If the last node i bears the amount of computation, calculate the amount of computation of the first actor_allocation_scheme[i] nodes
                 comp_requirement = sum(inference_graph.x[0:actor_allocation_scheme[i],0])
-                # inference_graph.x[0:actor_allocation_scheme[i], 0] = 0 # 给选过的点置零
+                # inference_graph.x[0:actor_allocation_scheme[i], 0] = 0 # Set the selected points to zero
 
-                comm_Kbits = 0 # 最后一个节点的传输量永远是0
+                comm_Kbits = 0 # The transmission amount of the last node is always 0
 
         
         # comp_latency[i] = comp_requirement/comp_ability
         # comm_latency[i] = comm_Kbits / (comm_speed+1e-10)
         comp_latency_now = comp_requirement/comp_ability
         comm_latency_now = comm_Kbits/(comm_speed+1e-10)
-        latency_now = comp_latency_now+comm_latency_now # !当前节点的延迟为计算延迟和通信延迟之和
+        latency_now = comp_latency_now+comm_latency_now # The latency of the current node is the sum of computation latency and communication latency
 
-        comp_latency += comp_latency_now # comm_latency单位是ms，这里节点的算力是GFlops，但是计算量为MFLOPs，正常来说应该给算力*1000才能得到秒，但是我们要的是毫秒，所以不给算力换算了。
-        comm_latency += comm_latency_now # comm_latency单位是ms，这里传输量为KB，但是计算量为MBps，正常来说应该给comm_Kbits除以1000才能得到秒，但是我们要的是毫秒，所以不给comm_Kbits换算了。
+        comp_latency += comp_latency_now # comm_latency unit is ms, here the computing power of the node is GFlops, but the amount of computation is MFLOPs. Normally, the computing power should be multiplied by 1000 to get seconds, but we need milliseconds, so we don't convert the computing power.
+        comm_latency += comm_latency_now # comm_latency unit is ms, here the transmission amount is KB, but the amount of computation is MBps. Normally, comm_Kbits should be divided by 1000 to get seconds, but we need milliseconds, so we don't convert comm_Kbits.
 
-        # 将计算时延和通信时延存储到矩阵中
+        # Store computation latency and communication latency into matrices
         comp_latency_matrix[i] = comp_latency_now
         comm_latency_matrix[i] = comm_latency_now
 
-        # print('当前 %d 节点的延迟为 %f ms, 其中计算延迟: %f ms, 计算量: %f MFLOPs, 算力: %f GFlops。传输延迟: %f ms, 传输量: %f KBits, 传输速度: %f MBps'%(i+1, latency_now, comp_latency_now, comp_requirement, comp_ability, comm_latency_now, comm_Kbits, comm_speed))
+        # print('The latency of node %d is %f ms, including computation latency: %f ms, computation amount: %f MFLOPs, computing power: %f GFlops. Communication latency: %f ms, transmission amount: %f KBits, transmission speed: %f MBps'%(i+1, latency_now, comp_latency_now, comp_requirement, comp_ability, comm_latency_now, comm_Kbits, comm_speed))
 
     # print(comp_latency, comm_latency)
     # latency_total = np.sum(comp_latency) + np.sum(comm_latency)
     latency_total = comp_latency+comm_latency
-    # print('总延迟：%f ms, 计算延迟：%f ms, 通信延迟：%f ms。'%(latency_total, comp_latency, comm_latency))
+    # print('Total latency: %f ms, computation latency: %f ms, communication latency: %f ms.'%(latency_total, comp_latency, comm_latency))
     return latency_total, comp_latency, comm_latency, comp_latency_matrix, comm_latency_matrix
 
 # if __name__ == '__main__':

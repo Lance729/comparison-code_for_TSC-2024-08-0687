@@ -11,7 +11,7 @@ This project is designed to reduce latency in network environments using various
 
 2. To run the main program, execute:
     ```bash
-    python run.py
+    python3 run.py
     ```
 
 ## Demonstrating Environment Usage

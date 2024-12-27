@@ -1,0 +1,335 @@
+
+{
+    "energy_consumption": {
+        "node3_4G5G_tau6": {
+            "taco": {
+                "energy_total": 222064.70289677,
+                "comp_energy": 274.9079749,
+                "comm_energy": 221789.79492188
+            },
+            "UE_first": {
+                "energy_total": 332707.65827447,
+                "comp_energy": 22.96589166,
+                "comm_energy": 332684.69238281
+            },
+            "UE_last": {
+                "energy_total": 333390.20457268,
+                "comp_energy": 705.51218987,
+                "comm_energy": 332684.69238281
+            },
+            "ES_last": {
+                "energy_total": 235065.97511768,
+                "comp_energy": 557.14790821,
+                "comm_energy": 234508.82720947
+            }
+        },
+        "node3_4G5G_tau15": {
+            "taco": {
+                "energy_total": 88990.82365483,
+                "comp_energy": 274.9079749,
+                "comm_energy": 88715.91567993
+            },
+            "UE_first": {
+                "energy_total": 332707.65827447,
+                "comp_energy": 22.96589166,
+                "comm_energy": 332684.69238281
+            },
+            "UE_last": {
+                "energy_total": 333390.20457268,
+                "comp_energy": 705.51218987,
+                "comm_energy": 332684.69238281
+            },
+            "ES_last": {
+                "energy_total": 117254.92088795,
+                "comp_energy": 557.14790821,
+                "comm_energy": 116697.77297974
+            }
+        },
+        "node3_4G5G_tau25": {
+            "taco": {
+                "energy_total": 53504.45738286,
+                "comp_energy": 274.9079749,
+                "comm_energy": 53229.54940796
+            },
+            "UE_first": {
+                "energy_total": 332707.65827447,
+                "comp_energy": 22.96589166,
+                "comm_energy": 332684.69238281
+            },
+            "UE_last": {
+                "energy_total": 333390.20457268,
+                "comp_energy": 705.51218987,
+                "comm_energy": 332684.69238281
+            },
+            "ES_last": {
+                "energy_total": 85838.64014149,
+                "comp_energy": 557.14790821,
+                "comm_energy": 85281.49223328
+            }
+        },
+        "node5_4G5G": {
+            "taco": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "UE_first": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "UE_last": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "ES_last": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            }
+        },
+        "node7_4G5G": {
+            "taco": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "UE_first": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "UE_last": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "ES_last": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            }
+        },
+        "node10_4G5G": {
+            "taco": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "UE_first": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "UE_last": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "ES_last": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            }
+        },
+        "node15_4G5G_tau6": {
+            "taco": {
+                "energy_total": 210086.72216032,
+                "comp_energy": 296.92723844,
+                "comm_energy": 221789.79492188
+            },
+            "UE_first": {
+                "energy_total": 332727.71006115,
+                "comp_energy": 43.01767834,
+                "comm_energy": 332684.69238281
+            },
+            "UE_last": {
+                "energy_total": 334006.19543791,
+                "comp_energy": 1321.5030551,
+                "comm_energy": 332684.69238281
+            },
+            "ES_last": {
+                "energy_total": 222681.43380433,
+                "comp_energy": 891.63888246,
+                "comm_energy": 221789.79492188
+            }
+        },
+        "node15_4G5G_tau15": {
+            "taco": {
+                "energy_total": 86912.84291837,
+                "comp_energy": 296.92723844,
+                "comm_energy": 88715.91567993
+            },
+            "UE_first": {
+                "energy_total": 332727.71006115,
+                "comp_energy": 43.01767834,
+                "comm_energy": 332684.69238281
+            },
+            "UE_last": {
+                "energy_total": 334006.19543791,
+                "comp_energy": 1321.5030551,
+                "comm_energy": 332684.69238281
+            },
+            "ES_last": {
+                "energy_total": 89607.55456239,
+                "comp_energy": 891.63888246,
+                "comm_energy": 88715.91567993
+            }
+        },
+        "node15_4G5G_tau25": {
+            "taco": {
+                "energy_total": 44526.4766464,
+                "comp_energy": 296.92723844,
+                "comm_energy": 53229.54940796
+            },
+            "UE_first": {
+                "energy_total": 332727.71006115,
+                "comp_energy": 43.01767834,
+                "comm_energy": 332684.69238281
+            },
+            "UE_last": {
+                "energy_total": 334006.19543791,
+                "comp_energy": 1321.5030551,
+                "comm_energy": 332684.69238281
+            },
+            "ES_last": {
+                "energy_total": 54121.18829042,
+                "comp_energy": 891.63888246,
+                "comm_energy": 53229.54940796
+            }
+        },
+        "node20_4G5G": {
+            "taco": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "UE_first": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "UE_last": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "ES_last": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            }
+        },
+        "node24_4G5G": {
+            "taco": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "UE_first": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "UE_last": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "ES_last": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            }
+        },
+        "node27_4G5G": {
+            "taco": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "UE_first": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "UE_last": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            },
+            "ES_last": {
+                "energy_total": 0,
+                "comp_energy": 0,
+                "comm_energy": 0
+            }
+        },
+        "node32_4G5G_tau6": {
+            "taco": {
+                "energy_total": 212117.6775964,
+                "comp_energy": 327.88267452,
+                "comm_energy": 221789.79492188
+            },
+            "UE_first": {
+                "energy_total": 332760.6329741,
+                "comp_energy": 75.94059128,
+                "comm_energy": 332684.69238281
+            },
+            "UE_last": {
+                "energy_total": 335017.58732796,
+                "comp_energy": 2332.89494514,
+                "comm_energy": 332684.69238281
+            },
+            "ES_last": {
+                "energy_total": 223691.1801368,
+                "comp_energy": 1901.38521492,
+                "comm_energy": 221789.79492188
+            }
+        },
+        "node32_4G5G_tau15": {
+            "taco": {
+                "energy_total": 87843.79835445,
+                "comp_energy": 327.88267452,
+                "comm_energy": 88715.91567993
+            },
+            "UE_first": {
+                "energy_total": 332760.6329741,
+                "comp_energy": 75.94059128,
+                "comm_energy": 332684.69238281
+            },
+            "UE_last": {
+                "energy_total": 335017.58732796,
+                "comp_energy": 2332.89494514,
+                "comm_energy": 332684.69238281
+            },
+            "ES_last": {
+                "energy_total": 90617.30089486,
+                "comp_energy": 1901.38521492,
+                "comm_energy": 88715.91567993
+            }
+        },
+        "node32_4G5G_tau25": {
+            "taco": {
+                "energy_total": 45557.43208248,
+                "comp_energy": 327.88267452,
+                "comm_energy": 53229.54940796
+            },
+            "UE_first": {
+                "energy_total": 332760.6329741,
+                "comp_energy": 75.94059128,
+                "comm_energy": 332684.69238281
+            },
+            "UE_last": {
+                "energy_total": 335017.58732796,
+                "comp_energy": 2332.89494514,
+                "comm_energy": 332684.69238281
+            },
+            "ES_last": {
+                "energy_total": 55130.93462288,
+                "comp_energy": 1901.38521492,
+                "comm_energy": 53229.54940796
+            }
+        }
+    }
+}

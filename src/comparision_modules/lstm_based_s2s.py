@@ -13,15 +13,15 @@ import torch.optim as optim
 import numpy as np
 
 
-# 超参数
-input_dim = 100    # 输入数据的维度
-hidden_dim = 256   # LSTM的隐藏层维度
-output_dim = 10    # 输出数据的维度
-num_layers = 2     # LSTM的层数
+# Hyperparameters
+input_dim = 100    # Input data dimension
+hidden_dim = 256   # LSTM hidden layer dimension
+output_dim = 10    # Output data dimension
+num_layers = 2     # Number of LSTM layers
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
-# 编码器
+# Encoder
 class Encoder(nn.Module):
     def __init__(self, input_dim, hidden_dim, num_layers):
         super(Encoder, self).__init__()
@@ -32,7 +32,7 @@ class Encoder(nn.Module):
         return hidden, cell
 
 
-# 解码器
+# Decoder
 class Decoder(nn.Module):
     def __init__(self, output_dim, hidden_dim, num_layers):
         super(Decoder, self).__init__()
@@ -45,7 +45,7 @@ class Decoder(nn.Module):
         return predictions, hidden, cell
 
 
-# 序列到序列模型
+# Sequence to Sequence model
 class Seq2Seq(nn.Module):
     def __init__(self, encoder, decoder):
         super(Seq2Seq, self).__init__()
@@ -58,7 +58,7 @@ class Seq2Seq(nn.Module):
         return outputs
 
 
-# 数据生成函数
+# Data generation function
 def generate_data(num_samples, timesteps, input_dim, output_dim):
     encoder_input_data = np.random.random((num_samples, timesteps, input_dim))
     decoder_input_data = np.random.random((num_samples, timesteps, output_dim))
@@ -70,7 +70,7 @@ def generate_data(num_samples, timesteps, input_dim, output_dim):
     )
 
 
-# 模型训练函数
+# Model training function
 def train_model(model, encoder_input_data, decoder_input_data, decoder_target_data, epochs, batch_size, criterion, optimizer):
     for epoch in range(epochs):
         model.train()
@@ -92,7 +92,7 @@ def train_model(model, encoder_input_data, decoder_input_data, decoder_target_da
         print(f"Epoch {epoch+1}/{epochs}, Loss: {epoch_loss / (len(encoder_input_data) // batch_size)}")
 
 
-# 推理测试函数
+# Inference test function
 def test_model(model, encoder_input, decoder_input, timesteps):
     model.eval()
     with torch.no_grad():
@@ -101,39 +101,39 @@ def test_model(model, encoder_input, decoder_input, timesteps):
 
         hidden, cell = model.encoder(encoder_input)
         outputs = []
-        input_step = decoder_input[:, 0:1, :]  # 初始化解码器输入
+        input_step = decoder_input[:, 0:1, :]  # Initialize decoder input
 
         for t in range(timesteps):
             output, hidden, cell = model.decoder(input_step, hidden, cell)
             outputs.append(output)
-            input_step = output  # 使用当前输出作为下一步的输入
+            input_step = output  # Use current output as next step input
 
         outputs = torch.cat(outputs, dim=1)
         return outputs.cpu().numpy()
 
 
-# 主函数
+# Main function
 def main():
-    # 数据生成
+    # Data generation
     num_samples = 1000
     timesteps = 20
     encoder_input_data, decoder_input_data, decoder_target_data = generate_data(num_samples, timesteps, input_dim, output_dim)
 
-    # 初始化模型
+    # Initialize model
     encoder = Encoder(input_dim, hidden_dim, num_layers).to(device)
     decoder = Decoder(output_dim, hidden_dim, num_layers).to(device)
     model = Seq2Seq(encoder, decoder).to(device)
 
-    # 损失函数和优化器
+    # Loss function and optimizer
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    # 训练模型
+    # Train model
     epochs = 20
     batch_size = 64
     train_model(model, encoder_input_data, decoder_input_data, decoder_target_data, epochs, batch_size, criterion, optimizer)
 
-    # 测试模型
+    # Test model
     test_encoder_input = encoder_input_data[:1]
     test_decoder_input = decoder_input_data[:1]
     predictions = test_model(model, test_encoder_input, test_decoder_input, timesteps)

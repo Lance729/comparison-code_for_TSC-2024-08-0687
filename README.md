@@ -32,7 +32,7 @@ The code of solutions that Nath's PTC [9] and Meng's DTOO [10] are listed in pat
     python3 run.py --eval_BO --eval_DNN
     ```
 
-5. To generate the environment and see the energy consumption results, execute:
+5. To generate the environment, execute:
     ```bash
     python3 run.py --eval_network_env
     ```

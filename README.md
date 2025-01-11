@@ -17,10 +17,27 @@ The code of solutions that Nath's PTC [9] and Meng's DTOO [10] are listed in pat
     conda env create -f requirements.yml
     ```
 
-2. To run the main program, execute:
+2.1 To elevate the PTC [9] solution, execute:
     ```bash
-    python3 run.py
+    python3 run.py --eval_BO
     ```
+
+2.2 To elevate the DTOO [10] solution, execute:
+    ```bash
+    python3 run.py --eval_DNN
+    ```
+
+2.3 To elevate both the PTC [9] and DTOO [10] solutions, execute:
+    ```bash
+    python3 run.py --eval_BO --eval_DNN
+    ```
+
+3. To generate the environment and see the energy consumption results, execute:
+    ```bash
+    python3 run.py --eval_network_env
+    ```
+
+
 
 ## Demonstrating Environment Usage
 
